@@ -19,9 +19,28 @@ const logoHTML =
 
 const DEFAULTS = { logoEnabled: true };
 
+const api =
+    typeof browser !== 'undefined' && browser.storage
+        ? browser
+        : typeof chrome !== 'undefined' && chrome.storage
+          ? chrome
+          : typeof browser !== 'undefined'
+            ? browser
+            : chrome;
+
 function getSettings() {
     return new Promise((resolve) => {
-        chrome.storage.sync.get(DEFAULTS, resolve);
+        if (api.storage?.sync) {
+            api.storage.sync.get(DEFAULTS, resolve);
+            return;
+        }
+        api.runtime.sendMessage({ type: 'getSettings' }, (response) => {
+            if (api.runtime.lastError || !response) {
+                resolve({ ...DEFAULTS });
+                return;
+            }
+            resolve({ ...DEFAULTS, ...response });
+        });
     });
 }
 
@@ -96,7 +115,7 @@ async function init() {
     settings.logoEnabled ? load() : unload();
 }
 
-chrome.runtime.onMessage.addListener(({ type, key, value }) => {
+api.runtime.onMessage.addListener(({ type, key, value }) => {
     if (type !== 'settingChanged') return;
     if (key === 'logoEnabled') {
         value ? load() : unload();

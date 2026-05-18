@@ -1,5 +1,13 @@
 (() => {
     const api = typeof browser !== 'undefined' ? browser : chrome;
+    const DEFAULTS = { logoEnabled: true };
+
+    api.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+        if (message.type === 'getSettings') {
+            api.storage.sync.get(DEFAULTS, sendResponse);
+            return true;
+        }
+    });
 
     function isYouTube(url) {
         if (!url) return false;
