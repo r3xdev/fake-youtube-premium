@@ -1,0 +1,39 @@
+{
+   "manifest_version": 3,
+   "author": "r3xdev",
+   "name": "__MSG_extensionName__",
+   "default_locale": "en",
+   "version": "1.0",
+   "description": "__MSG_extensionDescription__",
+   "action": {
+      "default_icon": {
+         "48": "icons/icon48.png",
+         "128": "icons/icon128.png"
+      },
+      "default_title": "__MSG_extensionName__",
+      "default_popup": "popup.html"
+   },
+   "permissions": [
+      "tabs",
+      "storage"
+   ],
+   "background": {
+      "service_worker": "background.js"
+   },
+   "homepage_url": "https://github.com/r3xdev",
+   "content_scripts": [
+      {
+         "exclude_matches": [ "*://*.music.youtube.com/*" ],
+         "all_frames": false,
+         "js": [
+            "anu.js"
+         ],
+         "matches": ["*://youtube.com/*", "*://www.youtube.com/*", "*://m.youtube.com/*"]
+      }
+   ],
+   "host_permissions": ["*://*.youtube.com/*"],
+   "icons": {
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+   }
+}

@@ -1,0 +1,20 @@
+{
+    "extensionName": {
+        "message": "Fake Youtube Premium"
+    },
+    "extensionDescription": {
+        "message": "Swap the YouTube logo to the Premium version."
+    },
+    "legendSettings": {
+        "message": "Settings"
+    },
+    "toggleLogoTitle": {
+        "message": "Premium Logo"
+    },
+    "toggleLogoDesc": {
+        "message": "Swap the YouTube logo to Premium"
+    },
+    "textDeveloper": {
+        "message": "by r3xdev"
+    }
+}
