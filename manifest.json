@@ -1,16 +1,15 @@
 {
    "manifest_version": 3,
    "author": "r3xdev",
-   "name": "__MSG_extensionName__",
-   "default_locale": "en",
-   "version": "1.0",
-   "description": "__MSG_extensionDescription__",
+   "name": "Fake Youtube Premium",
+   "version": "1.1",
+   "description": "Swap the YouTube logo to the Premium version.",
    "action": {
       "default_icon": {
          "48": "icons/icon48.png",
          "128": "icons/icon128.png"
       },
-      "default_title": "__MSG_extensionName__",
+      "default_title": "Fake Youtube Premium",
       "default_popup": "popup.html"
    },
    "permissions": [

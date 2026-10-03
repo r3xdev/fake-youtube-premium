@@ -105,11 +105,27 @@
         }
 
         .footer {
+            display: block;
             padding: 10px 20px;
             border-top: 1px solid #272727;
             font-size: 11px;
             color: #4a4a4a;
             text-align: center;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .footer:hover {
+            color: #909090;
+        }
+
+        .header .version {
+            font-size: 11px;
+            font-weight: 400;
+            color: #606060;
+            background: #1f1f1f;
+            border-radius: 9px;
+            padding: 2px 8px;
         }
     </style>
 </head>
@@ -120,6 +136,7 @@
             <path d="M11.43 14.28L18.85 10l-7.42-4.28v8.56z" fill="#fff"/>
         </svg>
         <h1></h1>
+        <span class="version" id="ext-version"></span>
     </div>
 
     <div class="list">
@@ -135,8 +152,9 @@
         </div>
     </div>
 
-    <div class="footer"></div>
+    <div class="footer" id="footer-github"></div>
 
+    <script src="locales.js"></script>
     <script src="popup.js"></script>
 </body>
 </html>

@@ -19,28 +19,47 @@ const logoHTML =
 
 const DEFAULTS = { logoEnabled: true };
 
-const api =
-    typeof browser !== 'undefined' && browser.storage
-        ? browser
-        : typeof chrome !== 'undefined' && chrome.storage
-          ? chrome
-          : typeof browser !== 'undefined'
-            ? browser
-            : chrome;
+function getApi() {
+    if (typeof browser !== 'undefined' && browser?.runtime?.id) return browser;
+    if (typeof chrome !== 'undefined' && chrome?.runtime?.id) return chrome;
+    return null;
+}
 
 function getSettings() {
     return new Promise((resolve) => {
-        if (api.storage?.sync) {
-            api.storage.sync.get(DEFAULTS, resolve);
+        const api = getApi();
+        if (!api) {
+            resolve({ ...DEFAULTS });
             return;
         }
-        api.runtime.sendMessage({ type: 'getSettings' }, (response) => {
-            if (api.runtime.lastError || !response) {
-                resolve({ ...DEFAULTS });
+
+        try {
+            if (api.storage?.sync) {
+                api.storage.sync.get(DEFAULTS, (items) => {
+                    if (api.runtime?.lastError || !items) {
+                        resolve({ ...DEFAULTS });
+                        return;
+                    }
+                    resolve({ ...DEFAULTS, ...items });
+                });
                 return;
             }
-            resolve({ ...DEFAULTS, ...response });
-        });
+
+            if (api.runtime?.sendMessage) {
+                api.runtime.sendMessage({ type: 'getSettings' }, (response) => {
+                    if (api.runtime?.lastError || !response) {
+                        resolve({ ...DEFAULTS });
+                        return;
+                    }
+                    resolve({ ...DEFAULTS, ...response });
+                });
+                return;
+            }
+        } catch {
+            // Extension context invalidated (e.g. after reload/update).
+        }
+
+        resolve({ ...DEFAULTS });
     });
 }
 
@@ -115,7 +134,7 @@ async function init() {
     settings.logoEnabled ? load() : unload();
 }
 
-api.runtime.onMessage.addListener(({ type, key, value }) => {
+getApi()?.runtime?.onMessage?.addListener(({ type, key, value }) => {
     if (type !== 'settingChanged') return;
     if (key === 'logoEnabled') {
         value ? load() : unload();
